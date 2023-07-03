@@ -5,11 +5,13 @@ import 'package:flappy_bird/Layouts/Widgets/widget_bird.dart';
 import 'package:flappy_bird/Layouts/Widgets/widget_barrier.dart';
 import 'package:flappy_bird/Layouts/Widgets/widget_cover.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lottie/lottie.dart';
 import '../../Database/database.dart';
 import '../../Global/constant.dart';
 import '../../Global/functions.dart';
 import '../../Resources/strings.dart';
+import '../../ad_manager.dart';
 
 class GamePage extends StatefulWidget {
   GamePage({Key? key}) : super(key: key);
@@ -17,6 +19,48 @@ class GamePage extends StatefulWidget {
   State<GamePage> createState() => _GamePageState();
 }
 class _GamePageState extends State<GamePage> {
+  RewardedAd? _rewardedAd;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _loadRewardedAd();
+    super.initState();
+  }
+
+
+  @override
+  void dispose() {
+    // TODO: Dispose a BannerAd object
+    _rewardedAd?.dispose();
+    super.dispose();
+  }
+
+  void _loadRewardedAd() {
+    RewardedAd.load(
+      adUnitId: AdManager.rewardedAdUnitId,
+      request: AdRequest(),
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (ad) {
+          ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (ad) {
+              setState(() {
+                ad.dispose();
+                _rewardedAd = null;
+              });
+              _loadRewardedAd();
+            },
+          );
+          setState(() {
+            _rewardedAd = ad;
+          });
+        },
+        onAdFailedToLoad: (err) {
+          print('Failed to load a rewarded ad: ${err.message}');
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +141,13 @@ class _GamePageState extends State<GamePage> {
       });
       if (birdIsDead()) {
         timer.cancel();
-        _showDialog();
+        if(_rewardedAd == null){
+          _showDialog();
+        }else{
+          _rewardedAd?.show(onUserEarnedReward: (a,b){
+            _showDialog();
+          });
+        }
       }
       time += 0.032;
     });

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "711880223656",
+    "project_id": "flying-bird-mobile",
+    "storage_bucket": "flying-bird-mobile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:711880223656:android:b41337019fbf0d256c8b9d",
+        "android_client_info": {
+          "package_name": "com.flappy_bird.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "711880223656-epkfrgo89is0p81q6cf5nfj3q11lmgah.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9xmlC4ZYA2sZqn4Jop4GtXadGtSSb3iY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "711880223656-epkfrgo89is0p81q6cf5nfj3q11lmgah.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

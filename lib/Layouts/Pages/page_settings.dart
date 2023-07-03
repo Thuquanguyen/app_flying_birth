@@ -7,7 +7,9 @@ import 'package:flappy_bird/Layouts/Widgets/widget_music_settings.dart';
 import 'package:flappy_bird/Layouts/Widgets/widget_themes_settings.dart';
 import 'package:flappy_bird/Resources/strings.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../Global/functions.dart';
+import '../../ad_manager.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -53,7 +55,7 @@ class _SettingsState extends State<Settings> {
                       ),
                       onPressed: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => StartScreen(),),);
-                      }, child: myText("Apply",Colors.white,35) ),
+                      }, child: myText("Save",Colors.white,35) ),
                 ],
               ),
             ),

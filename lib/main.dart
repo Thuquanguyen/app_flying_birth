@@ -3,6 +3,7 @@
 import 'package:flappy_bird/Routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'Layouts/Pages/page_start_screen.dart';
 import 'Resources/strings.dart';
@@ -10,6 +11,7 @@ import 'Resources/strings.dart';
 void main() async{
   await Hive.initFlutter();
   var box = await Hive.openBox('user');
+  await MobileAds.instance.initialize();
   runApp(MyApp());
 }
 

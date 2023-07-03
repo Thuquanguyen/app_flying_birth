@@ -12,7 +12,8 @@ class Button extends StatelessWidget {
   final double height;
   final String page;
   final String buttonType;
-  const Button({required this.width, required this.height,this.icon, required this.page,required this.buttonType,Key? key}) : super(key: key);
+  final Function? callBack;
+  const Button({required this.width, required this.height,this.icon, required this.page,required this.buttonType,this.callBack,Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,11 @@ class Button extends StatelessWidget {
               : icon
       ),
       onTap: (){
-        navigate(context, page);
+        if(callBack == null){
+          navigate(context, page);
+        }else{
+          callBack!.call();
+        }
       },
     );
   }
