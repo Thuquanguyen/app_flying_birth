@@ -22,7 +22,6 @@ class _StartScreenState extends State<StartScreen> {
   final myBox = Hive.box('user');
   BannerAd? _bannerAd;
   InterstitialAd? _interstitialAd;
-  RewardedAd? _rewardedAd;
 
   @override
   void initState() {
@@ -30,37 +29,10 @@ class _StartScreenState extends State<StartScreen> {
     init();
     initAds();
     _loadInterstitialAd();
-    _loadRewardedAd();
     AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
     AppLifecycleReactor(appOpenAdManager: appOpenAdManager)
         .listenToAppStateChanges();
     super.initState();
-  }
-
-  void _loadRewardedAd() {
-    RewardedAd.load(
-      adUnitId: AdManager.rewardedAdUnitId,
-      request: AdRequest(),
-      rewardedAdLoadCallback: RewardedAdLoadCallback(
-        onAdLoaded: (ad) {
-          ad.fullScreenContentCallback = FullScreenContentCallback(
-            onAdDismissedFullScreenContent: (ad) {
-              setState(() {
-                ad.dispose();
-                _rewardedAd = null;
-              });
-              _loadRewardedAd();
-            },
-          );
-          setState(() {
-            _rewardedAd = ad;
-          });
-        },
-        onAdFailedToLoad: (err) {
-          print('Failed to load a rewarded ad: ${err.message}');
-        },
-      ),
-    );
   }
 
   void _loadInterstitialAd() {
@@ -91,7 +63,6 @@ class _StartScreenState extends State<StartScreen> {
     // TODO: Dispose a BannerAd object
     _bannerAd?.dispose();
     _interstitialAd?.dispose();
-    _rewardedAd?.dispose();
     super.dispose();
   }
 
@@ -144,7 +115,7 @@ class _StartScreenState extends State<StartScreen> {
                 _buttons(context),
                 AboutUs(
                   size: size,
-                  rewardedAd: _rewardedAd,
+                  interstitialAd: _interstitialAd,
                 )
               ],
             )
@@ -212,9 +183,9 @@ class _StartScreenState extends State<StartScreen> {
 
 class AboutUs extends StatelessWidget {
   final Size size;
-  final RewardedAd? rewardedAd;
+  final InterstitialAd? interstitialAd;
 
-  AboutUs({required this.size,required this.rewardedAd, Key? key}) : super(key: key);
+  AboutUs({required this.size,required this.interstitialAd, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -222,7 +193,7 @@ class AboutUs extends StatelessWidget {
       margin: EdgeInsets.only(top: size.height * 0.2),
       child: GestureDetector(
           onTap: () {
-            if(rewardedAd == null){
+            if(interstitialAd == null){
               showDialog(
                 context: context,
                 builder: (context) {
@@ -230,14 +201,13 @@ class AboutUs extends StatelessWidget {
                 },
               );
             }else{
-              rewardedAd?.show(onUserEarnedReward: (a,b){
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return dialog(context);
-                  },
-                );
-              });
+              interstitialAd?.show();
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return dialog(context);
+                },
+              );
             }
           },
           child: myText("About Us", Colors.white, 20)),

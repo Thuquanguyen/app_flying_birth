@@ -19,12 +19,14 @@ class GamePage extends StatefulWidget {
   State<GamePage> createState() => _GamePageState();
 }
 class _GamePageState extends State<GamePage> {
-  RewardedAd? _rewardedAd;
+  InterstitialAd? _interstitialAd;
+  BannerAd? _bannerAd;
 
   @override
   void initState() {
     // TODO: implement initState
-    _loadRewardedAd();
+    _loadInterstitialAd();
+    initAds();
     super.initState();
   }
 
@@ -32,31 +34,48 @@ class _GamePageState extends State<GamePage> {
   @override
   void dispose() {
     // TODO: Dispose a BannerAd object
-    _rewardedAd?.dispose();
+    _interstitialAd?.dispose();
+    _bannerAd?.dispose();
     super.dispose();
   }
 
-  void _loadRewardedAd() {
-    RewardedAd.load(
-      adUnitId: AdManager.rewardedAdUnitId,
+  initAds() {
+    BannerAd(
+      adUnitId: AdManager.bannerAdUnitId,
       request: AdRequest(),
-      rewardedAdLoadCallback: RewardedAdLoadCallback(
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _bannerAd = ad as BannerAd;
+          });
+        },
+        onAdFailedToLoad: (ad, err) {
+          print('Failed to load a banner ad: ${err.message}');
+          ad.dispose();
+        },
+      ),
+    ).load();
+  }
+
+  void _loadInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: AdManager.interstitialAdUnitId,
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
           ad.fullScreenContentCallback = FullScreenContentCallback(
             onAdDismissedFullScreenContent: (ad) {
-              setState(() {
-                ad.dispose();
-                _rewardedAd = null;
-              });
-              _loadRewardedAd();
+              navigate(context, Str.settings);
             },
           );
+
           setState(() {
-            _rewardedAd = ad;
+            _interstitialAd = ad;
           });
         },
         onAdFailedToLoad: (err) {
-          print('Failed to load a rewarded ad: ${err.message}');
+          print('Failed to load an interstitial ad: ${err.message}');
         },
       ),
     );
@@ -68,6 +87,16 @@ class _GamePageState extends State<GamePage> {
       onTap: gameHasStarted ? jump : startGame,
       child: Scaffold(
         body: Column(children: [
+          if (_bannerAd != null)
+            Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                margin: EdgeInsets.only(top: kToolbarHeight),
+                width: _bannerAd!.size.width.toDouble(),
+                height: _bannerAd!.size.height.toDouble(),
+                child: AdWidget(ad: _bannerAd!),
+              ),
+            ),
           Expanded(
             flex: 3,
             child: Container(
@@ -141,12 +170,11 @@ class _GamePageState extends State<GamePage> {
       });
       if (birdIsDead()) {
         timer.cancel();
-        if(_rewardedAd == null){
+        if(_interstitialAd == null){
           _showDialog();
         }else{
-          _rewardedAd?.show(onUserEarnedReward: (a,b){
-            _showDialog();
-          });
+          _interstitialAd?.show();
+          _showDialog();
         }
       }
       time += 0.032;

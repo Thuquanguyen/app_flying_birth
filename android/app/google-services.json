@@ -1,38 +1,39 @@
 {
   "project_info": {
-    "project_number": "711880223656",
-    "project_id": "flying-bird-mobile",
-    "storage_bucket": "flying-bird-mobile.appspot.com"
+    "project_number": "140882324404",
+    "project_id": "flying-bird-mobile-c4d8b",
+    "storage_bucket": "flying-bird-mobile-c4d8b.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:711880223656:android:b41337019fbf0d256c8b9d",
+        "mobilesdk_app_id": "1:140882324404:android:abce0d17961b9c02d6e0e1",
         "android_client_info": {
           "package_name": "com.flappy_bird.mobile"
         }
       },
       "oauth_client": [
         {
-          "client_id": "711880223656-epkfrgo89is0p81q6cf5nfj3q11lmgah.apps.googleusercontent.com",
+          "client_id": "140882324404-4028og58253q9pm6hdf99asvr0d4ru5a.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD9xmlC4ZYA2sZqn4Jop4GtXadGtSSb3iY"
+          "current_key": "AIzaSyASJYsp9WE-MbrQn3Y0jpFDh0JKkLkMai4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "711880223656-epkfrgo89is0p81q6cf5nfj3q11lmgah.apps.googleusercontent.com",
+              "client_id": "140882324404-4028og58253q9pm6hdf99asvr0d4ru5a.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-5379224969805616~2464431795"
     }
   ],
   "configuration_version": "1"
